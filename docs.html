@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docs | LuacShield</title>
+<meta name="description" content="LuacShield documentation: presets, layers, FAQ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="topo"><img src="/topo.svg" alt=""></div>
+<header>
+<nav class="nav">
+  <a class="brand" href="/"><span class="mark">L</span><span class="name">LuacShield</span></a>
+  <div class="links"><a href="/#features">Features</a><a href="/pricing.html">Pricing</a><a href="/docs.html">Docs</a><a href="/start.html">Start</a></div>
+  <div id="auth-slot" style="display:flex;align-items:center;gap:12px;"><a class="btn btn-plum" href="/start.html">Dashboard</a></div>
+</nav>
+</header>
+<main>
+
+<div class="wrap">
+  <div class="hero" style="padding-bottom:0"><span class="eyebrow">Docs</span><h1>How to <span class="g">use it</span>.</h1></div>
+  <section class="block docs">
+    <nav>
+      <a href="#quickstart">Quickstart</a>
+      <a href="#presets">Presets</a>
+      <a href="#layers">Protection layers</a>
+      <a href="#runtime">Runtime requirements</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="docsec">
+      <div id="quickstart"><h3>Quickstart</h3>
+        <p>Open the <a href="/start.html" style="color:var(--accent)">dashboard</a>, paste your Lua/Luau script, pick a preset and hit Obfuscate. The output is a single self-contained script: copy it or download protected.lua and load it the same way you loaded the original.</p></div>
+      <div id="presets"><h3>Presets</h3>
+        <p><b>Weak</b> renames and wraps. <b>Medium</b> adds control-flow flattening and string encryption. <b>Strong</b> (default) adds the full Prometheus VM plus the encrypted-blob shell and all guard layers. <b>Maximum</b> raises every knob: heavier constant arrays and number splitting, longer builds.</p></div>
+      <div id="layers"><h3>Protection layers</h3>
+        <p>Each build runs: Prometheus VM rewrite → RC4 blob 1 → LZW shell with VERIFY2 checksum → anti-tamper / anti-sandbox / anti-env-log / anti-dump guards → RC4+LZW blob 2 → outer VM harness. The payload is an encrypted blob, so dumping the file surface reveals nothing; the LZW shell and VERIFY2 layers still run inside it.</p></div>
+      <div id="runtime"><h3>Runtime requirements</h3>
+        <p>Targets Lua 5.1-compatible and Luau runtimes (Roblox executors). Uses debug.getinfo, task.wait when present, and standard Roblox globals only when they exist; outside Roblox the sandbox and env-log guards skip cleanly.</p></div>
+      <div id="faq"><h3>FAQ</h3>
+        <p><b>Does output still print the same?</b> Yes. Every build is seed-validated with a real Lua round-trip before it ships.</p>
+        <p><b>Why is the output so much bigger?</b> The VM plus two encrypted blobs trade size for hardness; expect 40-120x on small scripts, less on large ones.</p>
+        <p><b>Can it be decrypted?</b> Keys are per-build random and live only inside the shell; a dump of the file is ciphertext.</p></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 LuacShield. Hardened Luau protection.</span>
+    <span><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/docs.html">Docs</a></span>
+  </div>
+</footer>
+</main>
+<script src="/config.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

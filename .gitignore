@@ -1,0 +1,3 @@
+node_modules/
+.validate_tmp.lua
+.vercel
