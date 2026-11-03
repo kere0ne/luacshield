@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuacShield | LuacShield</title>
+<meta name="description" content="Hardened VM-based Lua and Luau obfuscator. Prometheus engine, encrypted payload, anti-tamper, anti-dump, anti-sandbox, anti-env-log.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="topo"><img src="/topo.svg" alt=""></div>
+<header>
+<nav class="nav">
+  <a class="brand" href="/"><span class="mark">L</span><span class="name">LuacShield</span></a>
+  <div class="links"><a href="/#features">Features</a><a href="/pricing.html">Pricing</a><a href="/docs.html">Docs</a><a href="/start.html">Start</a></div>
+  <div id="auth-slot" style="display:flex;align-items:center;gap:12px;"><a class="btn btn-plum" href="/start.html">Dashboard</a></div>
+</nav>
+</header>
+<main>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="eyebrow">◆ Hardened VM · Prometheus engine</span>
+    <h1>Your Luau. Sealed in a <span class="g">hardened VM</span>.</h1>
+    <p class="lead">LuacShield compiles your script through the Prometheus engine, wraps it in an encrypted blob, and shells it with anti-tamper, anti-sandbox, anti-env-log and anti-dump layers. Dump the file and all you get is ciphertext. The whole engine runs in your browser: your script never leaves your device.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="/start.html">Start obfuscating</a>
+      <a class="btn btn-ghost" href="/docs.html">Read the docs</a>
+    </div>
+    <div class="statrow">
+      <div class="s"><div class="v">7 layers</div><div class="l">surface to VM</div></div>
+      <div class="s"><div class="v">300 KB</div><div class="l">per-script limit (web)</div></div>
+      <div class="s"><div class="v">5.1 / Luau</div><div class="l">target runtime</div></div>
+    </div>
+  </div>
+  <section class="block" id="features">
+    <span class="tag">Protection stack</span>
+    <h2 class="sec">Every layer runs inside the blob</h2>
+    <p class="sub">The payload is an encrypted blob: dumping the file surface reveals nothing. The LZW shell and VERIFY2 layers still run inside it, so the integrity and anti layers execute only after the payload decrypts itself in memory.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🛡</div><h3>VM anti-dump</h3><p>The whole payload is RC4-encrypted and LZW-packed before the outer VM runs. A dumped file is ciphertext; nothing is visible until it decrypts in memory.</p></div>
+      <div class="card"><div class="ico">⚖</div><h3>Anti-tamper</h3><p>Weighted checksum over the running source, re-read after a timed delay. Any edit between reads trips the guard and kills the run.</p></div>
+      <div class="card"><div class="ico">🧊</div><h3>Anti-sandbox</h3><p>Probes for Roblox DataModel identity, workspace and GetService, plus executor request-API hook detection across request/syn/http_request/fluxus.</p></div>
+      <div class="card"><div class="ico">📡</div><h3>Anti env-log</h3><p>Eight environment checks: trap players, GUI selection, tween goals, datastore names, LocalScript tags, prompts, team colors and group listings.</p></div>
+      <div class="card"><div class="ico">💾</div><h3>Anti-dump</h3><p>Debug hook inspection, ishookfunction sweeps on loadstring/load/metatable access, readonly-flag tamper detection and loader-presence probes.</p></div>
+      <div class="card"><div class="ico">🧬</div><h3>Anti constant-dump</h3><p>Constant array with shuffle and rotate, string encryption and number splitting. Strings never sit in the bytecode as plain literals.</p></div>
+    </div>
+  </section>
+  <section class="block" id="how">
+    <span class="tag">How it works</span>
+    <h2 class="sec">Surface to VM in seven layers</h2>
+    <div class="grid">
+      <div class="card"><h3>1 · Prometheus VM</h3><p>Your source is parsed and rewritten through the Prometheus engine (Vmify, Encrypt Strings, Anti Tamper, CFF, Constant Array, Numbers to Expressions).</p></div>
+      <div class="card"><h3>2 · First blob</h3><p>The compiled payload is RC4-encrypted with a per-build random key.</p></div>
+      <div class="card"><h3>3 · LZW shell + VERIFY2</h3><p>An LZW-compressed shell unpacks the blob and verifies its checksum in memory before executing.</p></div>
+      <div class="card"><h3>4 · Guard layers</h3><p>Anti-sandbox, anti-env-log and anti-dump run inside the shell, before your first line executes.</p></div>
+      <div class="card"><h3>5 · Second blob</h3><p>The shell is itself RC4-encrypted and LZW-packed into a second blob.</p></div>
+      <div class="card"><h3>6 · Outer VM</h3><p>A Prometheus-generated VM harness decrypts, unwraps and runs the whole stack. A seed-validated build ships only after a real Lua 5.1 round-trip.</p></div>
+    </div>
+  </section>
+  <section class="block">
+    <span class="tag">Pricing</span>
+    <h2 class="sec">Start free</h2>
+    <p class="sub">Free while in beta: unlimited obfuscations, all presets, no key needed. See <a href="/pricing.html" style="color:var(--accent)">pricing</a> for what is planned next.</p>
+    <div class="cta" style="margin-top:26px"><a class="btn btn-primary" href="/start.html">Open the dashboard</a></div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 LuacShield. Hardened Luau protection.</span>
+    <span><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/docs.html">Docs</a></span>
+  </div>
+</footer>
+</main>
+<script src="/config.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

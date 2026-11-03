@@ -26,7 +26,14 @@ function findLuaFiles(dir) {
 }
 
 export function buildLuaSources() {
-  if (EMBEDDED_LUA_SOURCES) return { ...EMBEDDED_LUA_SOURCES };
+  if (EMBEDDED_LUA_SOURCES) {
+    const modules = {};
+    for (const [key, value] of Object.entries(EMBEDDED_LUA_SOURCES)) {
+      const rel = key.replace(/^prometheus-src\//, "");
+      modules[luaPathToModuleName(rel)] = value;
+    }
+    return modules;
+  }
   const modules = {};
   for (const abs of findLuaFiles(srcRoot)) {
     modules[luaPathToModuleName(path.relative(srcRoot, abs))] = fs.readFileSync(abs, "utf8");

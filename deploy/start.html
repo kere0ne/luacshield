@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | LuacShield</title>
+<meta name="description" content="LuacShield dashboard: sign in with Discord and obfuscate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="topo"><img src="/topo.svg" alt=""></div>
+<header>
+<nav class="nav">
+  <a class="brand" href="/"><span class="mark">L</span><span class="name">LuacShield</span></a>
+  <div class="links"><a href="/#features">Features</a><a href="/pricing.html">Pricing</a><a href="/docs.html">Docs</a><a href="/start.html">Start</a></div>
+  <div id="auth-slot" style="display:flex;align-items:center;gap:12px;"><a class="btn btn-plum" href="/start.html">Dashboard</a></div>
+</nav>
+</header>
+<main>
+
+<div class="wrap">
+  <div class="hero" style="padding-bottom:0"><span class="eyebrow">Dashboard</span><h1>Start <span class="g">obfuscating</span>.</h1>
+  <p class="lead">Paste your Lua or Luau source, pick a preset, and get a sealed build. Sign in with Discord to keep your identity across sessions.</p></div>
+  <section class="block">
+    <div class="auth-card" style="margin-top:0" id="auth-card">
+      <h3 style="font-size:18px;margin-bottom:6px">Sign in</h3>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:18px">Discord-only. We only read your username and avatar.</p>
+      <button class="btn btn-primary" id="discord-login">Continue with Discord</button>
+    </div>
+    <form class="obf-panel" id="obf-form">
+      <span class="tag">Obfuscator</span>
+      <textarea id="src" rows="10" placeholder="-- paste your Lua / Luau source here&#10;print('hello from LuacShield')"></textarea>
+      <div class="row">
+        <select id="preset">
+          <option>Weak</option><option>Medium</option><option selected>Strong</option><option>Maximum</option>
+        </select>
+        <button class="btn btn-primary" id="run-btn" type="submit">Obfuscate</button>
+        <button class="btn btn-ghost" id="copy-btn" type="button">Copy</button>
+        <button class="btn btn-ghost" id="dl-btn" type="button">Download .lua</button>
+      </div>
+      <div class="meta-line" id="meta"></div>
+      <div class="output" id="output" hidden></div>
+    </form>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 LuacShield. Hardened Luau protection.</span>
+    <span><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/docs.html">Docs</a></span>
+  </div>
+</footer>
+</main>
+<script defer src="/engine.js"></script>
+<script src="/config.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
