@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { LuaFactory } from "wasmoon";
+import { EMBEDDED_LUA_SOURCES } from "./sources-embedded.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const srcRoot = path.join(here, "prometheus-src");
@@ -25,6 +26,7 @@ function findLuaFiles(dir) {
 }
 
 export function buildLuaSources() {
+  if (EMBEDDED_LUA_SOURCES) return { ...EMBEDDED_LUA_SOURCES };
   const modules = {};
   for (const abs of findLuaFiles(srcRoot)) {
     modules[luaPathToModuleName(path.relative(srcRoot, abs))] = fs.readFileSync(abs, "utf8");
@@ -40,8 +42,8 @@ function toLuaLongString(s) {
   return `[${eq}[${s}]${eq}]`;
 }
 
-export async function createLuaEngine({ openStandardLibs = true } = {}) {
-  const factory = new LuaFactory(undefined, undefined);
+export async function createLuaEngine({ openStandardLibs = true, wasmUri } = {}) {
+  const factory = new LuaFactory(wasmUri, undefined);
   const engine = await factory.createEngine({ openStandardLibs });
   const modules = buildLuaSources();
   const bootstrap = Object.entries(modules)

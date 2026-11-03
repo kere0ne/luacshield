@@ -49,28 +49,26 @@
       e.preventDefault();
       const source = src.value;
       if (!source.trim()) { meta.innerHTML = '<span class="badge-err">Paste a script first.</span>'; return; }
+      if (new TextEncoder().encode(source).length > 300 * 1024) { meta.innerHTML = '<span class="badge-err">Source too large (300 KB max on the web build).</span>'; return; }
+      if (!window.LuacShieldEngine) { meta.innerHTML = '<span class="badge-err">Engine still loading, try again in a moment.</span>'; return; }
       runBtn.disabled = true; runBtn.textContent = "Obfuscating…";
-      out.textContent = ""; meta.textContent = "";
+      out.textContent = ""; meta.textContent = "Warming up the VM…";
       try {
-        const r = await fetch("/api/obfuscate", {
-          method: "POST", headers: { "content-type": "application/json" },
-          body: JSON.stringify({ source, preset: presetSel.value })
+        const level = (presetSel.value === "Weak" || presetSel.value === "Medium") ? "medium" : "maximum";
+        const r = await window.LuacShieldEngine.luacshieldProtect({
+          source, level,
+          onStep: (s) => { meta.textContent = String(s); }
         });
-        const d = await r.json();
-        if (d.ok) {
-          out.textContent = d.output;
-          meta.innerHTML = '<span class="badge-ok">Done.</span> ' + (source.length / 1024).toFixed(1) + " KB in → " + (d.output.length / 1024).toFixed(1) + " KB out";
-          copyBtn.style.display = "inline-flex"; dlBtn.style.display = "inline-flex";
-          copyBtn.onclick = () => { navigator.clipboard.writeText(d.output); copyBtn.textContent = "Copied"; setTimeout(() => copyBtn.textContent = "Copy", 1200); };
-          dlBtn.onclick = () => {
-            const blob = new Blob([d.output], { type: "text/plain" });
-            const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "protected.lua"; a.click();
-          };
-        } else {
-          meta.innerHTML = '<span class="badge-err">' + escapeHtml(d.error || "failed") + "</span>";
-        }
+        out.textContent = r.output;
+        meta.innerHTML = '<span class="badge-ok">Done.</span> ' + (source.length / 1024).toFixed(1) + " KB in → " + (r.output.length / 1024).toFixed(1) + " KB out · ran entirely in your browser";
+        copyBtn.style.display = "inline-flex"; dlBtn.style.display = "inline-flex";
+        copyBtn.onclick = () => { navigator.clipboard.writeText(r.output); copyBtn.textContent = "Copied"; setTimeout(() => copyBtn.textContent = "Copy", 1200); };
+        dlBtn.onclick = () => {
+          const blob = new Blob([r.output], { type: "text/plain" });
+          const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "protected.lua"; a.click();
+        };
       } catch (err) {
-        meta.innerHTML = '<span class="badge-err">Request failed: ' + escapeHtml(String(err)) + "</span>";
+        meta.innerHTML = '<span class="badge-err">' + escapeHtml(String(err && err.message || err).slice(0, 220)) + "</span>";
       }
       runBtn.disabled = false; runBtn.textContent = "Obfuscate";
     });
@@ -87,7 +85,7 @@
       if (error) { loginBtn.disabled = false; loginBtn.textContent = "Try again"; }
     });
   } else if (loginBtn && !sb) {
-    loginBtn.textContent = "Auth is being set up";
+    loginBtn.textContent = "Sign in coming soon";
     loginBtn.disabled = true;
   }
 

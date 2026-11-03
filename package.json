@@ -10,6 +10,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "buffer": "^6.0.3",
+    "esbuild": "^0.28.2",
     "wasmoon": "^1.16.0"
   },
   "type": "module",
